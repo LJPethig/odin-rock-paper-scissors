@@ -1,64 +1,66 @@
-let humanScore = 0;
-let computerScore = 0;
+let humanScore;
+let computerScore;
 const ROUNDS = 5; /* Number of game rounds */
 
 function computerChoice() {
-    return "ROCK";
+    let num = Math.floor(Math.random() * 3) + 1;
+    if (num === 1) {
+        return "ROCK";
+    } else if (num === 2) {
+        return "PAPER";
+    } else if (num === 3) {
+        return "SCISSORS";
+    }
 }
 
 function humanChoice() {
-    return "SCISSORS";
+    return "ROCK";
 }
 
-function roundWinner(hChoice, cChoice) {
-    if (cChoice === hChoice) {
-        roundDraw();
-    } else if (cChoice === "ROCK" && hChoice === "PAPER") {
-        humanWin();
-    } else if (cChoice === "PAPER" && hChoice === "SCISSORS") {
-        humanWin();
-    } else if (cChoice === "SCISSORS" && hChoice === "ROCK") {
-        humanWin();
-    } else {
-        computerWin();
+function roundWinner(humanChoice, computerChoice) {
+    let result;
+    if (computerChoice === humanChoice) {
+        result = "this round is a draw!";
     }
-    console.log(hChoice, cChoice);
+    else if (computerChoice === "ROCK" && humanChoice === "PAPER" ||
+             computerChoice === "PAPER" && humanChoice === "SCISSORS" ||
+             computerChoice === "SCISSORS" && humanChoice === "ROCK") {
+        result = "you win this round!";
+        humanScore ++;
+    } else {
+        result = "computer wins this round!";
+        computerScore ++;
+    }
+    return roundResult(humanChoice, computerChoice, result)
 }
 
-function roundDraw() {
-    return console.log("This round is a draw!");
-}
-
-function computerWin() {
-    computerScore ++;
-    return console.log("The computer won this round!");
-}
-
-function humanWin() {
-    humanScore ++;
-    return console.log("You won this round!");
+function roundResult(humanChoice, computerChoice, result) {
+    return `Computer choose ${computerChoice}, you choose ${humanChoice} ${result}`;
 }
 
 function playRound(roundNumber) {
     console.log(`Round ${roundNumber}`);
-    roundWinner(humanChoice(), computerChoice())
+    console.log(roundWinner(humanChoice(), computerChoice()));
 }
 
 function gameWinner() {
+    let message = `You won ${humanScore} rounds, computer won ${computerScore} rounds`;
     if (humanScore === computerScore) {
-        return "Game Over, It's a draw";
+        return `${message}\nGame Over, It's a draw!`;
     } else if (humanScore > computerScore) {
-        return "Game Over, You won";
+        return `${message}\nGame Over, You won!`;
     } else if (computerScore > humanScore) {
-        return"Game Over, You lost";
+        return `${message}\nGame Over, You lost!`;
     }
 }
 
 function playGame() {
+    humanScore = 0;
+    computerScore = 0;
     for (let i=1; i<=ROUNDS; i++) {
         playRound(i);
     }
-    console.log(humanScore, computerScore);
+
     console.log(gameWinner());
 }
 
